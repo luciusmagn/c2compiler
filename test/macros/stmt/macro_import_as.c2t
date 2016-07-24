@@ -1,0 +1,21 @@
+// @recipe bin
+$warnings no-unused
+
+// @file{file1}
+module file1;
+
+public int32 a;
+
+public macro incr() {
+    f1.a++;          // ok, but weird
+}
+
+// @file{file2}
+module file2;
+
+import file1 as f1;
+
+func void myfunc() {
+    f1.incr!();
+}
+

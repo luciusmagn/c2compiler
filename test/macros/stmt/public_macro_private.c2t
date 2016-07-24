@@ -1,0 +1,21 @@
+// @recipe bin
+$warnings no-unused
+
+// @file{file1}
+module file1;
+
+int32 a;
+
+public macro incr() {
+    file1.a++;
+}
+
+// @file{file2}
+module file2;
+
+import file1;
+
+func void myfunc() {
+    file1.incr!();      // @error{public macro file1.incr using non-public variable test.a}
+}
+

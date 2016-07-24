@@ -1,0 +1,23 @@
+// @recipe bin
+$warnings no-unused
+
+// @file{file1}
+module file1;
+
+int32 a;
+
+public macro incr() {
+    a++;
+}
+
+// @file{file2}
+module file2;
+
+int32 a;
+
+import file1;
+
+func void myfunc() {
+    file1.incr!();      // ok since macro a refers to file2.a
+}
+

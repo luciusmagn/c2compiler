@@ -1,0 +1,23 @@
+// @recipe bin
+$warnings no-unused
+
+// @file{file1}
+module aaa;
+
+public macro mm() {
+    test();
+}
+
+// @file{file2}
+module bbb;
+
+import aaa;
+
+func void test() {
+
+}
+
+func void myfunc() {
+    aaa.mm!();
+}
+

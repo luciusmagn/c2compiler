@@ -1,0 +1,9 @@
+// @warnings{no-unused}
+module test;
+
+macro max(a, b) {
+    return (a > b) ? a : b;
+}
+
+int32 x = max!(10, 20);
+

@@ -1,0 +1,18 @@
+// @warnings{no-unused}
+module test;
+
+macro foo(a) {      // @error{redefinition of parameter a}
+}
+
+func void myfunc() {
+    foo!(myfunc);
+    foo!(1);
+    foo!(1 + 2);
+
+    const int32 A = 0;
+    foo!(A + 2);
+
+    int32 a = 0;
+    foo!(a + 2);     // @error{a macro argument must be a literal or constant expression}
+}
+

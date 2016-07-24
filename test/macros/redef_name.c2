@@ -1,0 +1,6 @@
+// @warnings{no-unused}
+module test;
+
+macro test() {      // @error{redefinition of test}
+}
+

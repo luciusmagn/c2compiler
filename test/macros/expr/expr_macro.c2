@@ -1,0 +1,12 @@
+// @warnings{no-unused}
+module test;
+
+macro post_incr(a) {
+    return a++;
+}
+
+func void foo() {
+    int32 x;
+    int32 b = post_incr!(x);
+}
+

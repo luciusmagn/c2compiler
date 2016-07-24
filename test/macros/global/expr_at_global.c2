@@ -1,0 +1,11 @@
+// @warnings{no-unused}
+module test;
+
+int32 a;
+
+macro foo() {
+    a++;        // @note{use of a is here}
+}
+
+foo!(); // @error{TBD, macro test.foo cannot be used a global scope?}
+

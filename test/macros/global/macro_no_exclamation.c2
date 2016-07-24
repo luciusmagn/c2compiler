@@ -1,0 +1,8 @@
+// @warnings{no-unused}
+module test;
+
+macro foo() {
+}
+
+foo(); // @error{test.foo is a macro, but called as a function}
+

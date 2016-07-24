@@ -1,0 +1,6 @@
+// @warnings{no-unused-macro}
+module test;
+
+macro foo() {   // @warning{unused macro test.foo}
+}
+

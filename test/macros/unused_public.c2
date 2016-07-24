@@ -1,0 +1,10 @@
+// @warnings{no-unused-function}
+module test;
+
+public macro foo() {    // @warning{macro 'test.foo' is not used public}
+}
+
+func void bar() {
+    foo!();
+}
+

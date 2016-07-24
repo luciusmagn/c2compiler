@@ -1,0 +1,9 @@
+// @warnings{no-unused}
+module test;
+
+int32 a = plus_one!(10);
+
+macro plus_one(a) {
+    return a + 1;
+}
+

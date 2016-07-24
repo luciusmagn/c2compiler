@@ -1,0 +1,10 @@
+// @warnings{no-unused}
+module test;
+
+macro bar() {
+}
+
+macro foo() {
+    bar!();     // @error{recursive macros are not allowed}
+}
+

@@ -1,0 +1,12 @@
+// @warnings{no-unused}
+module test;
+
+macro foo(a) {
+    a++;
+}
+
+func void bar() {
+    int32 a = 0;
+    foo!(a);
+}
+

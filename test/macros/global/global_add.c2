@@ -1,0 +1,40 @@
+// @warnings{no-unused}
+module test;
+
+type Index enum int8 {
+    A
+}
+
+type Element struct {
+     const char* name;
+}
+
+Element[+] elements;
+
+// without macro
+Index += A;
+elements += "a";
+
+Index += B;
+elements += "b";
+
+// c macro
+#define ADD(a, b) \
+    Index += a; \
+    elements += b;
+
+ADD(C, "c")     // -> note no ;
+
+// c2 macro
+macro add(a, b) {       // TODO check if a,b clash with module namespace
+    Index += a;
+    elements += b;
+}
+
+add!(D, "d");    // -> note ; and also !
+
+public func int32 main() {
+    return 0;
+}
+
+

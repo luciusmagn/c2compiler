@@ -1,0 +1,28 @@
+// @recipe bin
+$warnings no-unused
+
+// @file{file1}
+module aaa;
+
+public func void test() {
+}
+
+// @file{file2}
+module bbb;
+
+import aaa as aa;
+
+public macro mm() {
+    aaa.test();         // @error{Q: force aaa, or allow alias?}
+}
+
+// @file{file3}
+module ccc;
+
+import aaa as a;
+import bbb;
+
+func void myfunc() {
+    bbb.mm!()
+}
+

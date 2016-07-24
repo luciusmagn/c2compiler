@@ -1,0 +1,11 @@
+// @warnings{no-unused}
+module test;
+
+macro foo() {
+    a++;        // @note{use of a is here}
+}
+
+func void myfunc() {
+    foo!(); // @error{macro test.foo requires external identifier a}
+}
+

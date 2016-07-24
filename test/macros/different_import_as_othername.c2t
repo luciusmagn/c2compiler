@@ -1,0 +1,28 @@
+// @recipe bin
+$warnings no-unused
+
+// @file{file1}
+module aaa;
+
+public func void test() {
+}
+
+// @file{file2}
+module bbb;
+
+import aaa as aa;
+
+public macro mm() {
+    a.test();         // @error{Q: allow? Where used, a is valid}
+}
+
+// @file{file3}
+module ccc;
+
+import aaa as a;
+import bbb;
+
+func void myfunc() {
+    bbb.mm!()
+}
+

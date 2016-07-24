@@ -1,0 +1,10 @@
+// @warnings{no-unused}
+module test;
+
+macro foo(a) {
+}
+
+func void myfunc() {
+    foo!();         // @error{too few arguments to macro invocation, expected 1, have 0}
+}
+
