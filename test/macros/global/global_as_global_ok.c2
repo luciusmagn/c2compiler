@@ -1,0 +1,9 @@
+// @warnings{no-unused}
+module test;
+
+macro foo() {
+    int32 a;
+}
+
+foo!();
+

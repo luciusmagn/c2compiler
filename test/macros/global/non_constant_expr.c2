@@ -4,7 +4,7 @@ module test;
 int32 a = plus_one!(10); // @error{initializer element is not a compile-time constant}
 int32 b;
 
-macro plus_one(a) {
+macro plus_one(a) func {
     // by using return X, we indicate it's an expr macro.
     // It cannot have any other statements then?
     return a + b;

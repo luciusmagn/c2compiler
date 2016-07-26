@@ -6,8 +6,8 @@ module file1;
 
 public int32 a;
 
-public macro incr() {
-    file1.a++;          // file1 is allowed here (but only if it is the own module)
+public macro incr() func {
+    file1.a++;          // file1 is allowed here? (but only if it is the own module)
 }
 
 // @file{file2}

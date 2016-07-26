@@ -12,7 +12,7 @@ module bbb;
 
 import aaa as aa;
 
-public macro mm() {
+public macro mm() func {
     aaa.test();         // @error{Q: force aaa, or allow alias?}
 }
 
@@ -23,6 +23,6 @@ import aaa as a;
 import bbb;
 
 func void myfunc() {
-    bbb.mm!()
+    bbb.mm!();
 }
 

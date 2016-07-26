@@ -2,6 +2,6 @@
 module test;
 
 macro foo() {
-    a++;        // ok, since macro is not used
+    a++;        // @error{expected identifier}
 }
 

@@ -6,7 +6,7 @@ module file1;
 
 int32 a;
 
-public macro incr() {
+public macro incr() func {
     file1.a++;
 }
 

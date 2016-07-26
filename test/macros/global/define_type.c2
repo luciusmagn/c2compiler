@@ -1,0 +1,73 @@
+// file list.c2
+module list;
+
+// IDEA 1: macro type argument (still using old C concat)
+
+public macro define(T, N) {
+
+type N ## _elem struct {
+    N ## Elem* next;
+    T* data;
+}
+
+type N struct {
+    N ## Elem* head;
+}
+
+func void N ## _init(N* l) {
+    l.head = nil;
+}
+
+func void N ## _add(N* l, T* elem) {
+    elem.next = nil;
+    if (l.head == nil) {
+        l.head = elem;
+    } else {
+        N ## Elem* cur = head;
+        while (cur.next != nil) cur = cur.next;
+        cur.next = elem;
+    }
+}
+
+type N ## Iter func void(T*);
+
+func void N ## _iterate(N* l, N ## Iter) {
+    N ## Elem cur = l.head;
+    while (cur != nil) {
+        Iter(cur);
+        cur = i.next;
+    }
+}
+
+}
+
+
+// test.c2
+module test;
+
+import list;
+
+type Point struct @(packed) {
+    uint16 x;
+    uint16 y;
+}
+
+func void iter(Point* p) {
+    // ..
+}
+
+list.define!(Point, Points);
+
+func void run() {
+    Point p1 = { 1, 1 }
+    Point p2 = { 2, 2 }
+    Point p3 = { 3, 3 }
+
+    Points p;
+    Points_init(&p);
+    Points_add(p, &p1);
+    Points_add(p, &p2);
+    Points_add(p, &p3);
+    Points_iterate(p, iter);
+}
+

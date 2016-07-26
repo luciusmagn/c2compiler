@@ -1,7 +1,7 @@
 // @warnings{no-unused}
 module test;
 
-macro foo(a) {
+macro foo(a) func {
 }
 
 func void myfunc() {

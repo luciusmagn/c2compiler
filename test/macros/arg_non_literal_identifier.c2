@@ -1,7 +1,7 @@
 // @warnings{no-unused}
 module test;
 
-macro foo(a) {      // @error{redefinition of parameter a}
+macro foo(a) func {
 }
 
 func void myfunc() {

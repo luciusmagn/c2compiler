@@ -1,0 +1,9 @@
+// @warnings{no-unused}
+module test;
+
+macro foo() func {
+    return a++;
+    if (a > 10) {       // @error{an expression macro can only contain a single return statement}
+    }
+}
+

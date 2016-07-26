@@ -1,0 +1,7 @@
+// @warnings{no-unused}
+module test;
+
+macro foo() func {
+    a++;        // ok, since macro is not used
+}
+

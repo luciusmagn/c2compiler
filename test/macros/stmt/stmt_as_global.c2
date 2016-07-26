@@ -3,9 +3,9 @@ module test;
 
 int32 a;
 
-macro foo() {
+macro foo() func {
     a++;        // @note{use of a is here}
 }
 
-foo!(); // @error{TBD, macro test.foo cannot be used a global scope?}
+foo!(); // @error{statement macro test.foo cannot be used here}
 

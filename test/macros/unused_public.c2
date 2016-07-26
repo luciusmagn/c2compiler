@@ -1,7 +1,7 @@
 // @warnings{no-unused-function}
 module test;
 
-public macro foo() {    // @warning{macro 'test.foo' is not used public}
+public macro foo() func {    // @warning{macro 'test.foo' is not used public}
 }
 
 func void bar() {

@@ -3,7 +3,7 @@ module test;
 
 int32 a = plus_one!(10);
 
-macro plus_one(a) {
+macro plus_one(a) func {
     return a + 1;
 }
 

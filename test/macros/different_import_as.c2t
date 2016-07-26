@@ -12,8 +12,8 @@ module bbb;
 
 import aaa as aa;
 
-public macro mm() {
-    aa.test();
+public macro mm() func {
+    aa.test();          // Q: which module prefixes to allow/force inside a macro?
 }
 
 // @file{file3}
@@ -23,6 +23,6 @@ import aaa as a;
 import bbb;
 
 func void myfunc() {
-    bbb.mm!()
+    bbb.mm!();
 }
 

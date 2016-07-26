@@ -1,7 +1,7 @@
 // @warnings{no-unused}
 module test;
 
-macro create(a) {
+macro create(a) func {
     int32 a = 10;
 }
 

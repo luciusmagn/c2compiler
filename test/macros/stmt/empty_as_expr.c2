@@ -1,0 +1,10 @@
+// @warnings{no-unused}
+module test;
+
+macro foo() func {
+}
+
+func void myfunc() {
+    int32 b = foo!(); // @error{statement macro test.foo cannot be used here}
+}
+

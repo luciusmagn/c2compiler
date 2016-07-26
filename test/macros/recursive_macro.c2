@@ -1,10 +1,10 @@
 // @warnings{no-unused}
 module test;
 
-macro bar() {
+macro bar() func {
 }
 
-macro foo() {
+macro foo() func {
     bar!();     // @error{recursive macros are not allowed}
 }
 

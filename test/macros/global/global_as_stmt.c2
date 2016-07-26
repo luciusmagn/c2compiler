@@ -1,0 +1,11 @@
+// @warnings{no-unused}
+module test;
+
+macro foo() {
+    int32 a;
+}
+
+func void myfunc() {
+    foo!();     // @error{global macro called be used here}
+}
+

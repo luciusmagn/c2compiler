@@ -3,7 +3,7 @@ module test;
 
 int32 a;
 
-macro foo() {
+macro foo() func {
     if (a == 1) a++;
 }
 

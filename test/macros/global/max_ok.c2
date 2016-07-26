@@ -1,7 +1,7 @@
 // @warnings{no-unused}
 module test;
 
-macro max(a, b) {
+macro max(a, b) func {
     return (a > b) ? a : b;
 }
 

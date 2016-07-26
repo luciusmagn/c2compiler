@@ -1,11 +1,13 @@
 // @warnings{no-unused}
 module test;
 
+int32 a;
+
 macro foo() func {
     a++;        // @note{use of a is here}
 }
 
 func void myfunc() {
-    foo!(); // @error{macro test.foo requires external identifier a}
+    int32 b = foo!(); // @error{statement macro test.foo cannot be used here}
 }
 

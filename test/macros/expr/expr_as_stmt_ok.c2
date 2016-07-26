@@ -1,0 +1,13 @@
+// @warnings{no-unused}
+module test;
+
+int32 a;
+
+macro foo() func {
+    return a++;
+}
+
+func void myfunc() {
+    foo!();
+}
+

@@ -7,7 +7,7 @@ module aaa;
 public func void test() {
 }
 
-public macro mm() {
+public macro mm() func {
     test();
 }
 

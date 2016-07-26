@@ -1,0 +1,9 @@
+// @warnings{no-unused}
+module test;
+
+macro foo() func {
+    return 1;
+}
+
+int32 b = foo!();   // @error{expression macro test.foo cannot be used here}
+

@@ -1,0 +1,22 @@
+// @recipe bin
+$warnings no-unused
+
+// @file{file1}
+module aaa;
+
+func void test() {
+}
+
+public macro mm() func {
+    aaa.test();         // NOTE: whether this is allowed, depends on where macro is used
+}
+
+// @file{file2}
+module bbb;
+
+import aaa;
+
+func void myfunc() {
+    aaa.mm!();      // @error{TODO macro aaa.mm uses non-public symbol aaa.test}
+}
+

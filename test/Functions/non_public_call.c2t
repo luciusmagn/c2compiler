@@ -1,0 +1,17 @@
+// @recipe bin
+    $warnings no-unused-variable no-unused-function
+
+// @file{file1}
+module foo;
+
+func void test1() {}
+
+// @file{file2}
+module bar;
+
+import foo;
+
+func void test2() {
+    foo.test1();        // @error{symbol foo.test1 is not public}
+}
+

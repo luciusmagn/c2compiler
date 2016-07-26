@@ -7,22 +7,18 @@ module aaa;
 public func void test() {
 }
 
+public macro mm() func {
+    aaa.test();
+}
+
 // @file{file2}
 module bbb;
 
 import aaa as aa;
 
-public macro mm() func {
-    a.test();         // @error{Q: allow? Where used, a is valid}
-}
-
-// @file{file3}
-module ccc;
-
-import aaa as a;
-import bbb;
+int32 aaa;
 
 func void myfunc() {
-    bbb.mm!();
+    aa.mm!();           // aaa inside mm should resolve to macro scope, thus module (not int32)
 }
 

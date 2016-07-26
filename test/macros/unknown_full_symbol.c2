@@ -1,0 +1,8 @@
+// @warnings{no-unused}
+module test;
+
+macro foo() func {
+    myfunc();       // cannot test here since it could be a different myfunc()
+    test.myfunc();  // @error{module test has no symbol myfunc}
+}
+

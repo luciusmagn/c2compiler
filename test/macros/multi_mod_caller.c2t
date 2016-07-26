@@ -4,7 +4,7 @@ $warnings no-unused
 // @file{file1}
 module aaa;
 
-public macro mm() {
+public macro mm() func {
     test();
 }
 
