@@ -6,6 +6,6 @@ macro foo() {
 }
 
 func void myfunc() {
-    int32 b = foo!();     // @error{global macro called be used here}
+    int32 b = foo!();     // @error{global macro called test.foo cannot be used here}
 }
 

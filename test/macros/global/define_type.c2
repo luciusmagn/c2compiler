@@ -64,10 +64,10 @@ func void run() {
     Point p3 = { 3, 3 }
 
     Points p;
-    Points_init(&p);
-    Points_add(p, &p1);
-    Points_add(p, &p2);
-    Points_add(p, &p3);
-    Points_iterate(p, iter);
+    p.init();
+    p.add(&p1);
+    p.add(&p2);
+    p.add(&p3);
+    p.iter(iter);
 }
 
