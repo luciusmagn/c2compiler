@@ -13,16 +13,27 @@
  * limitations under the License.
  */
 
-#ifndef UTILS_PROCESS_UTILS_H
-#define UTILS_PROCESS_UTILS_H
+#ifndef BUILDER_BUILDFILE_READER_H
+#define BUILDER_BUILDFILE_READER_H
 
 #include <string>
 
 namespace C2 {
 
-class ProcessUtils {
+class BuildFile;
+
+class BuildFileReader {
 public:
-    static int run(const std::string& path, const std::string& cmd, const std::string& logfile);
+    BuildFileReader(BuildFile& build_);
+    ~BuildFileReader() {}
+
+    bool parse(const std::string& filename);
+    const char* getErrorMsg() const { return errorMsg; }
+private:
+    const char* expandEnvVar(const std::string& filename, const char* raw);
+
+    BuildFile& build;
+    char errorMsg[256];
 };
 
 }

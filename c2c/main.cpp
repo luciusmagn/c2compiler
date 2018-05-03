@@ -25,7 +25,9 @@
 #include "Builder/Recipe.h"
 #include "Builder/RootFinder.h"
 #include "Builder/RecipeReader.h"
+#include "Builder/BuildFileReader.h"
 #include "AST/Component.h"
+#include "Utils/BuildFile.h"
 #include "Utils/Utils.h"
 #include "Utils/color.h"
 
@@ -33,6 +35,7 @@ using namespace C2;
 
 static const char* targetFilter;
 static const char* other_dir;
+static const char* build_file;
 static bool print_targets = false;
 static bool use_recipe = true;
 
@@ -44,6 +47,7 @@ static void usage(const char* name) {
     fprintf(stderr, "   -a2           - print AST after analysis 2\n");
     fprintf(stderr, "   -a3           - print AST after analysis 3 (final)\n");
     fprintf(stderr, "   -aL           - also print library AST\n");
+    fprintf(stderr, "   -b <file>     - use specified build file\n");
     fprintf(stderr, "   -c            - generate C code\n");
     fprintf(stderr, "   -C            - generate + print C code\n");
     fprintf(stderr, "   -d <dir>      - change directory first\n");
@@ -63,7 +67,7 @@ static void usage(const char* name) {
     fprintf(stderr, "   --refs        - generate c2tags file\n");
     fprintf(stderr, "   --check       - only parse + analyse\n");
     fprintf(stderr, "   --showlibs    - print available libraries\n");
-    exit(-1);
+    exit(EXIT_FAILURE);
 }
 
 static void parse_arguments(int argc, const char* argv[], BuildOptions& opts) {
@@ -93,6 +97,14 @@ static void parse_arguments(int argc, const char* argv[], BuildOptions& opts) {
                     break;
                 }
                 break;
+            case 'b':
+                if (i==argc-1) {
+                    fprintf(stderr, "error: -b needs an argument\n");
+                    exit(EXIT_FAILURE);
+                }
+                i++;
+                build_file = argv[i];
+                break;
             case 'c':
                 opts.generateC = true;
                 break;
@@ -103,7 +115,7 @@ static void parse_arguments(int argc, const char* argv[], BuildOptions& opts) {
             case 'd':
                 if (i==argc-1) {
                     fprintf(stderr, "error: -d needs an argument\n");
-                    exit(-1);
+                    exit(EXIT_FAILURE);
                 }
                 i++;
                 other_dir = argv[i];
@@ -183,13 +195,19 @@ static void parse_arguments(int argc, const char* argv[], BuildOptions& opts) {
             targetFilter = arg;
         }
     }
-    if (!use_recipe && !targetFilter) {
-        fprintf(stderr, "error: argument -f needs a filename\n");
-        exit(-1);
-    }
-    if (!use_recipe && print_targets) {
-        fprintf(stderr, "error: -f cannot be used together with -l\n");
-        exit(-1);
+    if (!use_recipe) {
+        if (!targetFilter) {
+            fprintf(stderr, "error: argument -f needs a filename\n");
+            exit(EXIT_FAILURE);
+        }
+        if (print_targets) {
+            fprintf(stderr, "error: -f cannot be used together with -l\n");
+            exit(EXIT_FAILURE);
+        }
+        if (build_file) {
+            fprintf(stderr, "error: -f cannot be used together with -b\n");
+            exit(EXIT_FAILURE);
+        }
     }
 }
 
@@ -199,30 +217,23 @@ int main(int argc, const char *argv[])
     BuildOptions opts;
     parse_arguments(argc, argv, opts);
 
-    // TODO get ENV C2LIBDIR -> should be set
-    {
-        const char* envname = "C2_LIBDIR";
-        opts.libdir = getenv(envname);
-        if (!opts.libdir) {
-            fprintf(stderr, "please set %s in the ENV to point at the directory containing c2libs/\n", envname);
-            return -1;
-        }
-    }
+    opts.libdir = getenv("C2_LIBDIR");
+
     if (other_dir) {
         if (chdir(other_dir)) {
             fprintf(stderr, "cannot chdir to %s: %s\n", other_dir, strerror(errno));
-            return -1;
+            return EXIT_FAILURE;
         }
     }
 
-
     if (!use_recipe) {
+        // NOTE: don't support build file in this mode
         Recipe dummy("dummy", Component::EXECUTABLE);
         dummy.addFile(targetFilter);
-        C2Builder builder(dummy, opts);
+        C2Builder builder(dummy, 0, opts);
         int errors = builder.checkFiles();
         if (!errors) errors = builder.build();
-        return errors ? 1 : 0;
+        return errors ? EXIT_FAILURE : EXIT_SUCCESS;
     }
 
     RootFinder finder;
@@ -231,14 +242,27 @@ int main(int argc, const char *argv[])
     RecipeReader reader;
     if (print_targets) {
         reader.print();
-        return 0;
+        return EXIT_SUCCESS;
     }
+
+    BuildFile buildFile;
+    BuildFile* buildFilePtr = NULL;
+    BuildFileReader buildReader(buildFile);
+    if (!build_file) build_file = finder.getBuildFile();
+    if (build_file) {
+        if (!buildReader.parse(build_file)) {
+            fprintf(stderr, "Error reading %s: %s\n", build_file, buildReader.getErrorMsg());
+            return EXIT_FAILURE;
+        }
+        buildFilePtr = &buildFile;
+    }
+
     int count = 0;
     bool hasErrors = false;
     for (int i=0; i<reader.count(); i++) {
         const Recipe& recipe = reader.get(i);
         if (targetFilter && recipe.name != targetFilter) continue;
-        C2Builder builder(recipe, opts);
+        C2Builder builder(recipe, buildFilePtr, opts);
         int errors = builder.checkFiles();
         if (!errors) errors = builder.build();
         if (errors) hasErrors = true;
@@ -246,13 +270,13 @@ int main(int argc, const char *argv[])
     }
     if (targetFilter && count == 0) {
         fprintf(stderr, "error: unknown target '%s'\n", targetFilter);
-        return -1;
+        return EXIT_FAILURE;
     }
     if (opts.printTiming) {
         uint64_t t2 = Utils::getCurrentTime();
         printf(COL_TIME"total building time: %" PRIu64" usec" ANSI_NORMAL"\n", t2 - t1);
     }
 
-    return hasErrors ? 1 : 0;
+    return hasErrors ? EXIT_FAILURE : EXIT_SUCCESS;
 }
 

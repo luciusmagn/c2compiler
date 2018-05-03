@@ -13,19 +13,15 @@
  * limitations under the License.
  */
 
-#ifndef UTILS_PROCESS_UTILS_H
-#define UTILS_PROCESS_UTILS_H
+#include "Utils/BuildFile.h"
 
-#include <string>
+using namespace C2;
 
-namespace C2 {
-
-class ProcessUtils {
-public:
-    static int run(const std::string& path, const std::string& cmd, const std::string& logfile);
-};
-
-}
-
-#endif
+BuildFile::BuildFile()
+    : target("")
+    , cc("")
+    , cflags("")
+    , ldflags("")
+    , outputDir("")
+{}
 

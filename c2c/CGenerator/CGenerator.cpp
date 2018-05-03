@@ -29,21 +29,24 @@
 
 using namespace C2;
 
+static const char* logfile = "build.log";
 
 CGenerator::CGenerator(const Component& component_,
                        const Modules& moduleMap_,
                        const HeaderNamer& namer_,
                        const Options& options_,
-                       const TargetInfo& targetInfo_)
+                       const TargetInfo& targetInfo_,
+                       const BuildFile* buildFile_)
     : component(component_)
     , moduleMap(moduleMap_)
     , includeNamer(namer_)
     , options(options_)
     , targetInfo(targetInfo_)
+    , buildFile(buildFile_)
 {}
 
 void CGenerator::generate() {
-    std::string outdir = options.outputDir + component.getName() + options.buildDir;
+    std::string outdir = options.outputDir + options.buildDir;
     const ModuleList& mods = component.getModules();
 
     // generate code
@@ -61,7 +64,7 @@ void CGenerator::generate() {
     }
 
     // generate Makefile
-    MakefileGenerator makeGen(component, options.libDir, options.single_module, targetInfo);
+    MakefileGenerator makeGen(component, options.single_module, targetInfo, buildFile);
     makeGen.write(outdir);
 
     // generate exports.version
@@ -90,11 +93,12 @@ void CGenerator::generate() {
 }
 
 void CGenerator::build() {
-    std::string outdir = options.outputDir + component.getName() + options.buildDir;
+    std::string outdir = options.outputDir + options.buildDir;
     // execute generated makefile
-    int retval = ProcessUtils::run(outdir, "/usr/bin/make");
+    int retval = ProcessUtils::run(outdir, "/usr/bin/make", logfile);
     if (retval != 0) {
         fprintf(stderr, ANSI_RED"error during external c compilation" ANSI_NORMAL"\n");
+        fprintf(stderr, "see %s%s for details\n", outdir.c_str(), logfile);
     }
 }
 
@@ -106,7 +110,7 @@ void CGenerator::generateExternalHeaders() {
         ModuleList single;
         single.push_back(M);
         CCodeGenerator gen(M->getName(), CCodeGenerator::MULTI_FILE, moduleMap, single, includeNamer, targetInfo);
-        gen.createLibHeader(options.printC, options.outputDir + component.getName() + options.buildDir);
+        gen.createLibHeader(options.printC, options.outputDir + options.buildDir);
     }
 }
 
@@ -119,7 +123,7 @@ void CGenerator::generateInterfaceFiles() {
         ModuleList single;
         single.push_back(M);
         CCodeGenerator gen(M->getName(), CCodeGenerator::MULTI_FILE, moduleMap, single, includeNamer, targetInfo);
-        gen.createLibHeader(options.printC, options.outputDir + component.getName() + "/");
+        gen.createLibHeader(options.printC, options.outputDir);
     }
 }
 

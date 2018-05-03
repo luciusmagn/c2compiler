@@ -588,12 +588,12 @@ C2::QualType FunctionAnalyser::analyseExpr(Expr* expr, unsigned side) {
         expr->setType(Type::Bool());
         return Type::Bool();
     case EXPR_CHAR_LITERAL:
-        expr->setType(Type::UInt8());
-        return Type::UInt8();
+        expr->setType(Type::Int8());
+        return Type::Int8();
     case EXPR_STRING_LITERAL:
     {
-        // return type: 'const uint8*'
-        QualType Q = Context.getPointerType(Type::UInt8());
+        // return type: 'const i8*'
+        QualType Q = Context.getPointerType(Type::Int8());
         Q.addConst();
         if (!Q->hasCanonicalType()) Q->setCanonicalType(Q);
         expr->setType(Q);
@@ -1181,6 +1181,9 @@ QualType FunctionAnalyser::analyseBinaryOperator(Expr* expr, unsigned side) {
         combineCtc(expr, Left, Right);
         if (Left->isConstant() && Right->isConstant()) expr->setConstant();
         break;
+    case BO_Cmp: // C++20 only
+        assert(0 && "unhandled binary operator type");
+        break;
     case BO_LE:
     case BO_LT:
     case BO_GE:
@@ -1252,6 +1255,9 @@ QualType FunctionAnalyser::analyseBinaryOperator(Expr* expr, unsigned side) {
     case BO_Shl:
     case BO_Shr:
         Result = TLeft;
+        break;
+    case BO_Cmp: // C++20 only
+        assert(0 && "unhandled binary operator type");
         break;
     case BO_LE:
     case BO_LT:
@@ -1933,7 +1939,7 @@ void FunctionAnalyser::checkAssignment(Expr* assignee, QualType TLeft) {
         }
     }
     if (TLeft.isConstQualified()) {
-        Diag(assignee->getLocation(), diag::err_typecheck_assign_const) << 4 << assignee->getSourceRange();
+        Diag(assignee->getLocation(), diag::err_typecheck_assign_const) << 5 << assignee->getSourceRange();
     }
 }
 

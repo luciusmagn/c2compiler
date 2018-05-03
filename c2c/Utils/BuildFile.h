@@ -13,16 +13,26 @@
  * limitations under the License.
  */
 
-#ifndef UTILS_PROCESS_UTILS_H
-#define UTILS_PROCESS_UTILS_H
+#ifndef UTILS_BUILDFILE_H
+#define UTILS_BUILDFILE_H
 
 #include <string>
+#include "Utils/StringList.h"
 
 namespace C2 {
 
-class ProcessUtils {
+class BuildFile {
 public:
-    static int run(const std::string& path, const std::string& cmd, const std::string& logfile);
+    BuildFile();
+
+    std::string target;
+    std::string cc;
+    std::string cflags;
+    std::string ldflags;
+    //std::string path;
+    StringList libDirs;
+
+    std::string outputDir;
 };
 
 }

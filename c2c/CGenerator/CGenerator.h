@@ -26,28 +26,28 @@ namespace C2 {
 class HeaderNamer;
 class Component;
 class TargetInfo;
+class BuildFile;
 
 class CGenerator {
 public:
     struct Options {
-        Options(const std::string& outputDir_, const std::string& buildDir_, const std::string& libDir_)
+        Options(const std::string& outputDir_, const std::string& buildDir_)
             : single_module(false), printC(false)
             , outputDir(outputDir_)
             , buildDir(buildDir_)
-            , libDir(libDir_)
         {}
         bool single_module;
         bool printC;
         std::string outputDir;
         std::string buildDir;
-        std::string libDir;
     };
 
     CGenerator(const Component& component_,
                const Modules& moduleMap_,
                const HeaderNamer& namer_,
                const Options& options_,
-               const TargetInfo& targetInfo_);
+               const TargetInfo& targetInfo_,
+               const BuildFile* buildFile_);
 
     void generate();
     void build();
@@ -59,6 +59,7 @@ private:
     const HeaderNamer& includeNamer;
     const Options& options;
     const TargetInfo& targetInfo;
+    const BuildFile* buildFile;
 };
 
 }
